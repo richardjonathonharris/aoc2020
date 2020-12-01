@@ -1,4 +1,4 @@
-package day1
+package find2020Sum
 
 import (
 	"testing"
@@ -25,5 +25,13 @@ func TestFindsFirstPairOfSumsToMeetCriteria(t *testing.T) {
 	res, _ := FindFirst2ValuesEqualValue(testList, 2020)
 	if res == [2]int{1, 2019} {
 		t.Errorf("FindFirst2ValuesEqualValue should return first pair [1010, 1010], returned %d", res)
+	}
+}
+
+func TestFindsProductAt3(t *testing.T) {
+	testList := []int{1010, 1010, 1, 2019}
+	res, _ := FindMultipleEqualValue(testList, 2021, 3)
+	if res != 1010 * 1010 {
+		t.Errorf("Should find the product for the first 3 terms that sum to 2021")
 	}
 }
