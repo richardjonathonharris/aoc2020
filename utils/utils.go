@@ -3,21 +3,13 @@ package utils
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
-	"net/http"
 )
 
-func PlaintextFromInternet(url string) {
-	response, err := http.Get(url)
+func PlaintextFromFile(fileLocation string) string {
+	data, err := ioutil.ReadFile(fileLocation)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error: ", err)
+		return ""
 	}
-	defer response.Body.Close()
-
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return string(responseData)
+	return string(data)
 }
