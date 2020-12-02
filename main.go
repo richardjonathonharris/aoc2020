@@ -90,7 +90,7 @@ func day2() {
 
 func main() {
 	day1()
-	fmt.Println("\n\n------------------\n\n")
+	fmt.Println("\n\n------------------")
 	day2()
-	fmt.Println("\n\n------------------\n\n")
+	fmt.Println("\n\n------------------")
 }
