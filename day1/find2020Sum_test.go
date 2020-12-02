@@ -31,7 +31,7 @@ func TestFindsFirstPairOfSumsToMeetCriteria(t *testing.T) {
 func TestFindsProductAt3(t *testing.T) {
 	testList := []int{1010, 1010, 1, 2019}
 	res, _ := FindMultipleEqualValue(testList, 2021, 3)
-	if res != 1010 * 1010 {
+	if res != 1010*1010 {
 		t.Errorf("Should find the product for the first 3 terms that sum to 2021")
 	}
 }

@@ -19,7 +19,7 @@ func FindFirst2ValuesEqualValue(listOfEntries []int, sumTotal int) ([2]int, erro
 			}
 		}
 	}
-	return [2]int{0,0}, errors.New("Could not find pair in list that summed to total")
+	return [2]int{0, 0}, errors.New("Could not find pair in list that summed to total")
 }
 
 func FindMultipleEqualValue(listOfEntries []int, sumTotal int, numValues int) (int, error) {
