@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/richardjonathonharris/aoc2020/day1"
 	"github.com/richardjonathonharris/aoc2020/day2"
+	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"strconv"
 	"strings"
@@ -88,9 +89,37 @@ func day2() {
 	fmt.Println("Total passwords:", countExactPasswords)
 }
 
+func day3() {
+	fmt.Println("Day 3!")
+	day3rawdata := strings.Split(utils.PlaintextFromFile("./day3/data.txt"), "\n")
+	instructions := seeker.Direction{Right: 3, Down: 1}
+	trees := seeker.Day3HelperFunction(instructions, day3rawdata, "#")
+	fmt.Println("Number of trees hit: ", trees)
+	fmt.Println("Part 2!")
+	setOfInstructions := []seeker.Direction{
+		{Right: 1, Down: 1},
+		{Right: 5, Down: 1},
+		{Right: 7, Down: 1},
+		{Right: 1, Down: 2},
+		{Right: 3, Down: 1},
+	}
+	var treeValues []int
+	for _, inst := range setOfInstructions {
+		trees := seeker.Day3HelperFunction(inst, day3rawdata, "#")
+		treeValues = append(treeValues, trees)
+	}
+	fmt.Println(treeValues)
+	product := 1
+	for _, tree := range treeValues {
+		product *= tree
+	}
+	fmt.Println("Product of trees hit", product)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
 	day2()
 	fmt.Println("\n\n------------------")
+	day3()
 }
