@@ -5,6 +5,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day1"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
+	"github.com/richardjonathonharris/aoc2020/day4"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"strconv"
 	"strings"
@@ -116,10 +117,29 @@ func day3() {
 	fmt.Println("Product of trees hit", product)
 }
 
+func day4() {
+	fmt.Println("Day 4!")
+	day4rawdata := strings.Split(utils.PlaintextFromFile("./day4/data.txt"), "\n\n")
+	countValid := 0
+	countValidAndGoodFields := 0
+	for _, pass := range day4rawdata {
+		if passporter.ValidatePassport(pass, false) {
+			countValid += 1
+		}
+		if passporter.ValidatePassport(pass, true) {
+			countValidAndGoodFields += 1
+		}
+	}
+	fmt.Println("Number of valid passports: ", countValid)
+	fmt.Println("Number of valid passports with good fields: ", countValidAndGoodFields)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
 	day2()
 	fmt.Println("\n\n------------------")
 	day3()
+	fmt.Println("\n\n------------------")
+	day4()
 }
