@@ -6,7 +6,9 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
+	"github.com/richardjonathonharris/aoc2020/day5"
 	"github.com/richardjonathonharris/aoc2020/utils"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -134,6 +136,36 @@ func day4() {
 	fmt.Println("Number of valid passports with good fields: ", countValidAndGoodFields)
 }
 
+func day5() {
+	fmt.Println("Day 5!")
+	day5rawdata := strings.Split(utils.PlaintextFromFile("./day5/data.txt"), "\n")
+	biggestId := 0
+	var seatIds []int
+	for _, direction := range day5rawdata {
+		estimatedPosition := seats.FindSeats(direction, [2]int{0, 127}, [2]int{0, 7})
+		row, column, seatId, err := estimatedPosition.GetSeatInformation()
+		fmt.Sprintf("Row %d, Seat %d", row, column)
+		if err != nil {
+			fmt.Println("We could not verify the seat!")
+			break
+		}
+		if seatId > biggestId {
+			biggestId = seatId
+		}
+		seatIds = append(seatIds, seatId)
+	}
+	fmt.Println("Biggest seat id ", biggestId)
+	sort.Ints(seatIds)
+	for idx, seatVal := range seatIds {
+		if idx == 0 || idx == len(seatIds)-1 {
+			continue
+		}
+		if seatIds[idx+1] == seatVal+2 {
+			fmt.Println(fmt.Sprintf("Possible seat val found! Idx %d = seat id %d and Idx %d = seat id %d!", idx, seatVal, idx+1, seatIds[idx+1]))
+		}
+	}
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -142,4 +174,6 @@ func main() {
 	day3()
 	fmt.Println("\n\n------------------")
 	day4()
+	fmt.Println("\n\n------------------")
+	day5()
 }
