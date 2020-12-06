@@ -7,6 +7,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
 	"github.com/richardjonathonharris/aoc2020/day5"
+	"github.com/richardjonathonharris/aoc2020/day6"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"sort"
 	"strconv"
@@ -166,6 +167,19 @@ func day5() {
 	}
 }
 
+func day6() {
+	fmt.Println("Day 6!")
+	day6rawdata := strings.Split(utils.PlaintextFromFile("./day6/data.txt"), "\n\n")
+	sumQuestions := 0
+	sumAllAnsweredYes := 0
+	for _, form := range day6rawdata {
+		sumQuestions += customs.CountUniqueLetters(form)
+		sumAllAnsweredYes += customs.CountLettersAllAnswer(form)
+	}
+	fmt.Println("Sum of questions answered yes by groups: ", sumQuestions)
+	fmt.Println("Sum of questions answered yes by each person in groups: ", sumAllAnsweredYes)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -176,4 +190,6 @@ func main() {
 	day4()
 	fmt.Println("\n\n------------------")
 	day5()
+	fmt.Println("\n\n------------------")
+	day6()
 }
