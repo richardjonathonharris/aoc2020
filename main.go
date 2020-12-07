@@ -8,6 +8,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day4"
 	"github.com/richardjonathonharris/aoc2020/day5"
 	"github.com/richardjonathonharris/aoc2020/day6"
+	"github.com/richardjonathonharris/aoc2020/day7"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"sort"
 	"strconv"
@@ -180,6 +181,32 @@ func day6() {
 	fmt.Println("Sum of questions answered yes by each person in groups: ", sumAllAnsweredYes)
 }
 
+func day7() {
+	fmt.Println("Day 7!")
+	day7rawdata := strings.Split(utils.PlaintextFromFile("./day7/data.txt"), "\n")
+	bagMap := bags.BagMap{}
+	for _, bagText := range day7rawdata {
+		newBag := bags.CreateNewBag(bagText)
+		bagMap[newBag.Color] = newBag
+	}
+	bagMapWithContainedBy := bags.BagMap{}
+	for color, bag := range bagMap {
+		containedBy := bags.AddAllContainingBags(color, bagMap)
+		bagMapWithContainedBy[color] = bags.Bag{Color: color, Contains: bag.Contains, ContainedBy: containedBy}
+	}
+
+	bagsContainingShowyBag := map[string]int{}
+	bags.ListAllContainingBags("shiny gold", bagMapWithContainedBy, bagsContainingShowyBag)
+	fmt.Println("Number of bags that could ultimately hold a shiny gold bag ", len(bagsContainingShowyBag))
+	showyBagContains := map[string]int{}
+	bags.CountAllBagsThatBagContains("shiny gold", bagMapWithContainedBy, showyBagContains)
+	counter := 0
+	for _, val := range showyBagContains {
+		counter += val
+	}
+	fmt.Println(fmt.Sprintf("Number of bags that a shiny gold bag holds %+v", counter))
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -192,4 +219,6 @@ func main() {
 	day5()
 	fmt.Println("\n\n------------------")
 	day6()
+	fmt.Println("\n\n------------------")
+	day7()
 }

@@ -22,7 +22,7 @@ func TestCountsAllTotalQuestionsAnswered(t *testing.T) {
 		abc
 		kmno`
 	resp := CountLettersAllAnswer(testString)
-	if resp != 1 {
+	if resp != 0 {
 		t.Errorf(fmt.Sprintf("Received %d expected 1", resp))
 	}
 }
