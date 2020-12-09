@@ -10,6 +10,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day6"
 	"github.com/richardjonathonharris/aoc2020/day7"
 	"github.com/richardjonathonharris/aoc2020/day8"
+	"github.com/richardjonathonharris/aoc2020/day9"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"sort"
 	"strconv"
@@ -209,7 +210,7 @@ func day7() {
 }
 
 func day8() {
-	fmt.Println("Day 7!")
+	fmt.Println("Day 8!")
 	day8rawdata := strings.Split(utils.PlaintextFromFile("./day8/data.txt"), "\n")
 	codebook := console.BuildCodebook(day8rawdata)
 	accValue, _ := console.FindRepeatedInstruction(codebook)
@@ -234,6 +235,27 @@ func day8() {
 	}
 }
 
+func day9() {
+	fmt.Println("Day 9!")
+	day9rawdata := strings.Split(utils.PlaintextFromFile("./day9/data.txt"), "\n")
+	var day9data []int
+	for _, item := range day9rawdata {
+		newVal, err := strconv.Atoi(item)
+		if err != nil {
+			panic("AHHHH IT DID NOT CONVERT")
+		}
+		day9data = append(day9data, newVal)
+	}
+	firstInvalid, err := xmas.FindFirstInvalidIndex(day9data, 25, 26)
+	if err != nil {
+		fmt.Println("Boy howdy, that's an error!")
+	}
+	fmt.Println("First invalid value is ", day9data[firstInvalid])
+	firstBad, lastBad := xmas.FindSmallLargeSumValues(day9data, firstInvalid)
+	fmt.Println("First bad value of sum ", firstBad, "last bad value of sum ", lastBad)
+	fmt.Println("Their sum is: ", firstBad+lastBad)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -250,4 +272,6 @@ func main() {
 	day7()
 	fmt.Println("\n\n------------------")
 	day8()
+	fmt.Println("\n\n------------------")
+	day9()
 }
