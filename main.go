@@ -9,6 +9,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day5"
 	"github.com/richardjonathonharris/aoc2020/day6"
 	"github.com/richardjonathonharris/aoc2020/day7"
+	"github.com/richardjonathonharris/aoc2020/day8"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"sort"
 	"strconv"
@@ -207,6 +208,32 @@ func day7() {
 	fmt.Println(fmt.Sprintf("Number of bags that a shiny gold bag holds %+v", counter))
 }
 
+func day8() {
+	fmt.Println("Day 7!")
+	day8rawdata := strings.Split(utils.PlaintextFromFile("./day8/data.txt"), "\n")
+	codebook := console.BuildCodebook(day8rawdata)
+	accValue, _ := console.FindRepeatedInstruction(codebook)
+	fmt.Println("Accumulator value right before repeated instruction", accValue)
+	// Brute forcing this but you know? I'm fine with that right now
+	for i := 0; i < len(codebook); i++ {
+		// Specifically create a new codebook
+		newCodebook := console.BuildCodebook(day8rawdata)
+		for k, v := range newCodebook {
+			if k == i && codebook[i].Op == console.Jump {
+				newCodebook[k] = &console.Instruction{Op: console.NoOp, Value: codebook[i].Value}
+			} else if k == i && codebook[i].Op == console.NoOp {
+				newCodebook[k] = &console.Instruction{Op: console.Jump, Value: codebook[i].Value}
+			} else {
+				newCodebook[k] = v
+			}
+		}
+		accValue, err := console.FindRepeatedInstruction(newCodebook)
+		if err != nil {
+			fmt.Println("Accumulator ", accValue, "by changing value at idx ", i)
+		}
+	}
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -221,4 +248,6 @@ func main() {
 	day6()
 	fmt.Println("\n\n------------------")
 	day7()
+	fmt.Println("\n\n------------------")
+	day8()
 }
