@@ -11,6 +11,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day7"
 	"github.com/richardjonathonharris/aoc2020/day8"
 	"github.com/richardjonathonharris/aoc2020/day9"
+	"github.com/richardjonathonharris/aoc2020/day10"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"sort"
 	"strconv"
@@ -256,6 +257,32 @@ func day9() {
 	fmt.Println("Their sum is: ", firstBad+lastBad)
 }
 
+func day10() {
+	fmt.Println("Day 10!")
+	day10rawdata := strings.Split(utils.PlaintextFromFile("./day10/data.txt"), "\n")
+	day10data := []int{0}
+	maxJoltage := 0 // original plug
+	for _, item := range day10rawdata {
+		newVal, err := strconv.Atoi(item)
+		if err != nil {
+			panic("AHHHH IT DID NOT CONVERT")
+		}
+		if newVal > maxJoltage {
+			maxJoltage = newVal
+		}
+		day10data = append(day10data, newVal)
+	}
+	day10data = append(day10data, maxJoltage + 3) // final plug
+	sort.Ints(day10data)
+	mapJoltDiffs, _ := joltage.GetMapOfJoltDiffs(day10data)
+	fmt.Printf("JoltDiffs %+v\n", mapJoltDiffs)
+	product :=  mapJoltDiffs["1"] * mapJoltDiffs["3"]
+	fmt.Println("Product between one and three would be", product)
+	possibleRoutes := []string{}
+	joltage.DetermineRoutes(&possibleRoutes, []string{"0"}, day10data, maxJoltage)
+	fmt.Printf("Found %d possible routes\n", possibleRoutes)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -274,4 +301,6 @@ func main() {
 	day8()
 	fmt.Println("\n\n------------------")
 	day9()
+	fmt.Println("\n\n------------------")
+	day10()
 }
