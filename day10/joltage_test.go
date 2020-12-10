@@ -39,10 +39,10 @@ func TestGetArrayOfNextJoltDiffs(t *testing.T) {
 }
 
 func TestCanGetPossibleRoutes(t *testing.T) {
+	var records [][]int
 	data := []int{0, 2, 3, 4, 5}
-	records := []string{}
-	DetermineRoutes(&records, []string{"0"}, data, 5)
-	fmt.Println("Records!", records)
+	DeterminePotentialRoutes(&records, []int{0}, data, 5)
+	fmt.Println(records)
 	if len(records) != 6 {
 		t.Errorf("did not find all paths")
 	}

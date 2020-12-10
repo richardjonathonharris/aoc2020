@@ -3,10 +3,6 @@ package joltage
 import (
 	"errors"
 	"fmt"
-	"strings"
-	"strconv"
-	"sync"
-	"time"
 )
 
 type JoltDiff int
@@ -38,121 +34,26 @@ func GetPossibleNextJoltDiffs(currJolt int, data[]int) []int {
 	return goodJolts
 }
 
-func DetermineRoute(records *[]string, currentJump string, currJolt int, data[]int) {
-	var recordedJump string
-	if len(currentJump) == 0 {
-		recordedJump = "0"
-	} else {
-		recordedJump = fmt.Sprintf("%s-%d", currentJump, currJolt)
+func DeterminePotentialRoutes(records *[][]int, currentRecord []int, data[]int, maxValue int) {
+	if len(*records) % 1000  == 0 {
+		fmt.Println("Currently at ", len(*records))
 	}
-	nextJolts := GetPossibleNextJoltDiffs(currJolt, data)
-	if len(nextJolts) == 0 {
-		// if there are no possible next jumps
-		*records = append(*records, recordedJump)
-	}
-	for _, jump := range nextJolts {
-		fmt.Println(recordedJump)
-		DetermineRoute(records, recordedJump, jump, data)
-	}
-}
-
-func generateNextRecords(ch chan string, wg *sync.WaitGroup, choice string, currentChoices []string, data []int) {
-	defer wg.Done()
-	var splitChoice string
-	if len(currentChoices) == 1 {
-		// we're just starting out
-		splitChoice = "0"
-	} else {
-		splitChoices := strings.Split(choice, "-")
-		splitChoice = splitChoices[len(splitChoices) - 1]
-	}
-	currentJump, err := strconv.Atoi(splitChoice)
-	if err != nil {
-		fmt.Println("Couldn't parse", err, splitChoice)
-	}
-	nextJumps := GetPossibleNextJoltDiffs(currentJump, data)
-	for _, jump := range nextJumps {
-		ch <- fmt.Sprintf("%s-%d", choice, jump)
-	}
-}
-
-func generateRecordsToSend(ch chan string, writech chan string, wg *sync.WaitGroup, rec string, maxVal int) {
-	defer wg.Done()
-	splitChoices := strings.Split(rec, "-")
-	splitChoice, _ := strconv.Atoi(splitChoices[len(splitChoices) - 1])
-	if splitChoice !=  maxVal {
-		ch <- rec
-	} else {
-		writech <- rec
-	}
-}
-
-func DetermineRoutes(records *[]string, currentChoices []string, data[]int, maxVal int) {
-	// records -> all entries added to array
-	// currentChoices -> all leaps made last iteration
-	// data -> array of data
-	fmt.Println("Called DetermineRoutes, current choices to look at ", len(currentChoices))
-	currTime := time.Now()
-	nextRecords := []string{}
-	nextRecordsChannel := make(chan string)
-	nextRecordWaitGroup := &sync.WaitGroup{}
-
-	nextRecordWaitGroup.Add(len(currentChoices))
-	for _, choice := range currentChoices {
-		go generateNextRecords(nextRecordsChannel, nextRecordWaitGroup, choice, currentChoices, data)
-	}
-
-	go func() {
-		for val := range nextRecordsChannel {
-			nextRecords = append(nextRecords, val)
-		}
-	}()
-
-	nextRecordWaitGroup.Wait()
-	close(nextRecordsChannel)
-
-	fmt.Println("Finished getting next hops, elapsed ", time.Now().Sub(currTime))
-	currTime = time.Now()
-
-	recordsToSend := []string{}
-	recordsToRecord := []string{}
-
-	sendChannel := make(chan string)
-	recordChannel := make(chan string)
-	recordsWG := &sync.WaitGroup{}
-
-
-	if len(nextRecords) > 0 {
-		// still more work to be done
-		recordsWG.Add(len(nextRecords))
-		for _, rec := range nextRecords {
-			go generateRecordsToSend(sendChannel, recordChannel, recordsWG, rec, maxVal)
-		}
-		// Do the next level of work
-		go func() {
-			for val := range sendChannel {
-				recordsToSend = append(recordsToSend, val)
+	for i := 1; i < 4; i++ {
+		valueInData := false
+		newValue := currentRecord[len(currentRecord) - 1] + i
+		for _, d := range data {
+			if d == newValue {
+				valueInData = true
 			}
-		}()
-
-		go func() {
-			for val := range recordChannel {
-				recordsToRecord = append(recordsToRecord, val)
-			}
-		}()
-
-		recordsWG.Wait()
-		close(sendChannel)
-		close(recordChannel)
-
-		fmt.Println("Finished getting what to pass next and what to save", time.Now().Sub(currTime))
-		for _, val := range recordsToRecord {
-			fmt.Println("appending to records", val)
-			*records = append(*records, val)
 		}
-
-		if len(recordsToSend) > 0 {
-			DetermineRoutes(records, nextRecords, data, maxVal)
+		if newValue > maxValue || !valueInData {
+			continue
+		}
+		newRecord := append(currentRecord, newValue) 
+		if newValue == maxValue {
+			*records = append(*records, newRecord)
+		} else {
+			DeterminePotentialRoutes(records, newRecord, data, maxValue)
 		}
 	}
 }
