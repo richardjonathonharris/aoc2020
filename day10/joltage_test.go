@@ -38,12 +38,23 @@ func TestGetArrayOfNextJoltDiffs(t *testing.T) {
 	}
 }
 
-func TestCanGetPossibleRoutes(t *testing.T) {
-	var records [][]int
+func TestGetMapOfJoltDiffs(t *testing.T) {
 	data := []int{0, 2, 3, 4, 5}
-	DeterminePotentialRoutes(&records, []int{0}, data, 5)
-	fmt.Println(records)
-	if len(records) != 6 {
-		t.Errorf("did not find all paths")
+	resp := MapOfAllJoltDiffs(data)
+	fmt.Printf("%+v", resp)
+	if len(resp) != 4 {
+		t.Errorf("Did not create list of next jolts for each app jolt")
+	}
+}
+
+func TestShamelesslyStolenGraphAlgo(t *testing.T) {
+	data := []int{0, 2, 3, 4, 5}
+	resp := MapOfAllJoltDiffs(data)
+	g := Graph{Adj: resp}
+	paths := 0
+	g.GetAllPaths(0, 5, &paths)
+	fmt.Println(paths)
+	if paths != 6 {
+		t.Errorf("Testing shamelessly stolen graph algo.")
 	}
 }

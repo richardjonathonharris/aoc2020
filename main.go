@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/richardjonathonharris/aoc2020/day1"
+	"github.com/richardjonathonharris/aoc2020/day10"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -11,13 +12,10 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day7"
 	"github.com/richardjonathonharris/aoc2020/day8"
 	"github.com/richardjonathonharris/aoc2020/day9"
-	"github.com/richardjonathonharris/aoc2020/day10"
 	"github.com/richardjonathonharris/aoc2020/utils"
 	"sort"
 	"strconv"
 	"strings"
-
-	"gonum.org/v1/gonum/stat/combin"
 )
 
 func day1() {
@@ -274,36 +272,17 @@ func day10() {
 		}
 		day10data = append(day10data, newVal)
 	}
-	day10data = append(day10data, maxJoltage + 3) // final plug
+	day10data = append(day10data, maxJoltage+3) // final plug
 	sort.Ints(day10data)
 	mapJoltDiffs, _ := joltage.GetMapOfJoltDiffs(day10data)
 	fmt.Printf("JoltDiffs %+v\n", mapJoltDiffs)
-	product :=  mapJoltDiffs["1"] * mapJoltDiffs["3"]
+	product := mapJoltDiffs["1"] * mapJoltDiffs["3"]
 	fmt.Println("Product between one and three would be", product)
-	fmt.Println(`
-		If we were to use all of them at once, we know we'd use all of the
-		converters, so the max number of combinations has to be the total number
-		of converters. The minimum number of converters has to be if we take 3 jumps
-		at every point. This may or may not be valid.
-		`)
-	// fmt.Println(combin.Combinations(len(day10data), len(day10data)))
-	// minValue := len(day10data) / 3
-	var allPossibleCombinations [][]int
-	for k := len(day10data)-4; k < len(day10data); k++{
-		fmt.Println("Checking combos at ", k)
-		generator := combin.NewCombinationGenerator(len(day10data), k)
-		for generator.Next() {
-			candidate := generator.Combination(nil)
-			// fmt.Println(candidate)
-			if candidate[0] != 0 || candidate[len(candidate) -1] != len(day10data) - 1 {
-				// doesn't start at or end at beginning / end
-				continue
-			} else {
-				allPossibleCombinations = append(allPossibleCombinations, candidate)
-			}
-		}
-	}
-	fmt.Println(len(allPossibleCombinations))
+	allMap := joltage.MapOfAllJoltDiffs(day10data)
+	g := joltage.Graph{Adj: allMap}
+	paths := 0
+	g.GetAllPaths(0, maxJoltage, &paths)
+	fmt.Println(paths)
 }
 
 func main() {
