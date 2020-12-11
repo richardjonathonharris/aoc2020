@@ -2,7 +2,6 @@ package joltage
 
 import (
 	"errors"
-	"fmt"
 )
 
 type JoltDiff int
@@ -34,19 +33,6 @@ func GetPossibleNextJoltDiffs(currJolt int, data []int) []int {
 	return goodJolts
 }
 
-func MapOfAllJoltDiffs(data []int) map[int][]int {
-	returnMap := map[int][]int{}
-	for _, val := range data {
-		possibleDiffs := GetPossibleNextJoltDiffs(val, data)
-		if len(possibleDiffs) == 0 {
-			continue
-		} else {
-			returnMap[val] = possibleDiffs
-		}
-	}
-	return returnMap
-}
-
 func GetMapOfJoltDiffs(data []int) (JoltRecord, error) {
 	jolts := JoltRecord{"1": 0, "2": 0, "3": 0}
 	for idx, jolt := range data {
@@ -69,40 +55,34 @@ func GetMapOfJoltDiffs(data []int) (JoltRecord, error) {
 	return jolts, nil
 }
 
-type Graph struct {
-	Adj map[int][]int
-}
+func DynamicProgrammingOption(startIndex int, numbers []int, visited map[int]int) int {
+	// shamelessly stolen: https://github.com/j4rv/advent-of-code-2020/blob/main/day-10/main.go
 
-func (g *Graph) AddEdge(node int, connectingNode int) {
-	if len(g.Adj[node]) == 0 {
-		g.Adj[node] = []int{connectingNode}
-	} else {
-		g.Adj[node] = append(g.Adj[node], connectingNode)
+	// Because this recurses, if we're at the end of the array, there's only one more place left to go
+	if startIndex >= len(numbers)-3 {
+		return 1
 	}
-}
 
-func (g *Graph) GetAllPaths(startNode int, endNode int, paths *int) {
-	visited := make(map[int]bool)
-	for key, _ := range g.Adj {
-		visited[key] = false
+	currentNumber := numbers[startIndex]
+	// if we've visited this index
+	if result, ok := visited[currentNumber]; ok {
+		return result
 	}
-	path := []int{}
-	g.GetAllPathsUtil(startNode, endNode, visited, path, paths)
-}
 
-func (g *Graph) GetAllPathsUtil(currentNode int, endNode int, visited map[int]bool, path []int, paths *int) {
-	visited[currentNode] = true
-	path = append(path, currentNode)
-	if currentNode == endNode {
-		fmt.Println(*paths + 1)
-		*paths += 1
-	} else {
-		for _, node := range g.Adj[currentNode] {
-			if (visited)[node] == false {
-				g.GetAllPathsUtil(node, endNode, visited, path, paths)
-			}
+	var count int
+	// iterate for the next three indices
+	for i := startIndex + 1; i < startIndex+4; i++ {
+		num := numbers[i]
+		if areCompatible(currentNumber, num) {
+			count += DynamicProgrammingOption(i, numbers, visited)
 		}
 	}
-	path = path[0:len(path) - 1]
-	visited[currentNode] = false
+
+	// Find number of counts of the current number
+	visited[currentNumber] = count
+	return count
+}
+
+func areCompatible(low int, high int) bool {
+	return low+1 == high || low+2 == high || low+3 == high
 }

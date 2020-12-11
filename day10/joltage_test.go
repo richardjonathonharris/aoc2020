@@ -38,23 +38,11 @@ func TestGetArrayOfNextJoltDiffs(t *testing.T) {
 	}
 }
 
-func TestGetMapOfJoltDiffs(t *testing.T) {
+func TestDynamicProgrammingOption(t *testing.T) {
 	data := []int{0, 2, 3, 4, 5}
-	resp := MapOfAllJoltDiffs(data)
-	fmt.Printf("%+v", resp)
-	if len(resp) != 4 {
-		t.Errorf("Did not create list of next jolts for each app jolt")
-	}
-}
-
-func TestShamelesslyStolenGraphAlgo(t *testing.T) {
-	data := []int{0, 2, 3, 4, 5}
-	resp := MapOfAllJoltDiffs(data)
-	g := Graph{Adj: resp}
-	paths := 0
-	g.GetAllPaths(0, 5, &paths)
-	fmt.Println(paths)
-	if paths != 6 {
-		t.Errorf("Testing shamelessly stolen graph algo.")
+	resp := DynamicProgrammingOption(0, data, make(map[int]int))
+	fmt.Println(resp)
+	if resp != 4 {
+		t.Errorf("Didn't find the right value")
 	}
 }

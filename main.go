@@ -278,11 +278,7 @@ func day10() {
 	fmt.Printf("JoltDiffs %+v\n", mapJoltDiffs)
 	product := mapJoltDiffs["1"] * mapJoltDiffs["3"]
 	fmt.Println("Product between one and three would be", product)
-	allMap := joltage.MapOfAllJoltDiffs(day10data)
-	g := joltage.Graph{Adj: allMap}
-	paths := 0
-	g.GetAllPaths(0, maxJoltage, &paths)
-	fmt.Println(paths)
+	fmt.Println(joltage.DynamicProgrammingOption(0, day10data, make(map[int]int)))
 }
 
 func main() {
