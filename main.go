@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/richardjonathonharris/aoc2020/day1"
+	"github.com/richardjonathonharris/aoc2020/day10"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -256,6 +257,30 @@ func day9() {
 	fmt.Println("Their sum is: ", firstBad+lastBad)
 }
 
+func day10() {
+	fmt.Println("Day 10!")
+	day10rawdata := strings.Split(utils.PlaintextFromFile("./day10/data.txt"), "\n")
+	day10data := []int{0}
+	maxJoltage := 0 // original plug
+	for _, item := range day10rawdata {
+		newVal, err := strconv.Atoi(item)
+		if err != nil {
+			panic("AHHHH IT DID NOT CONVERT")
+		}
+		if newVal > maxJoltage {
+			maxJoltage = newVal
+		}
+		day10data = append(day10data, newVal)
+	}
+	day10data = append(day10data, maxJoltage+3) // final plug
+	sort.Ints(day10data)
+	mapJoltDiffs, _ := joltage.GetMapOfJoltDiffs(day10data)
+	fmt.Printf("JoltDiffs %+v\n", mapJoltDiffs)
+	product := mapJoltDiffs["1"] * mapJoltDiffs["3"]
+	fmt.Println("Product between one and three would be", product)
+	fmt.Println(joltage.DynamicProgrammingOption(0, day10data, make(map[int]int)))
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -274,4 +299,6 @@ func main() {
 	day8()
 	fmt.Println("\n\n------------------")
 	day9()
+	fmt.Println("\n\n------------------")
+	day10()
 }
