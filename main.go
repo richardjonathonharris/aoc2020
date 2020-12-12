@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/richardjonathonharris/aoc2020/day1"
 	"github.com/richardjonathonharris/aoc2020/day10"
+	"github.com/richardjonathonharris/aoc2020/day11"
+	"github.com/richardjonathonharris/aoc2020/day11-2"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -281,6 +283,36 @@ func day10() {
 	fmt.Println(joltage.DynamicProgrammingOption(0, day10data, make(map[int]int)))
 }
 
+func day11() {
+	fmt.Println("Day 11!")
+	day11rawdata := strings.Split(utils.PlaintextFromFile("./day11/data.txt"), "\n")
+	planes := []sits.Plane{sits.Plane(day11rawdata)}
+	stopped := false
+	for stopped == false {
+		newPlane := sits.BuildPlane(planes[len(planes)-1])
+		planes = append(planes, newPlane)
+		fmt.Println("Iteration ", len(planes))
+		if len(planes) > 2 && strings.Join(planes[len(planes)-2], "") == strings.Join(planes[len(planes)-1], "") {
+			stopped = true
+		}
+	}
+	finalPlane := strings.Count(strings.Join(planes[len(planes)-1], ""), "#")
+	fmt.Printf("Number of occupied seats %d, Number of iterations %d\n", finalPlane, len(planes))
+	fmt.Println("-------PART 2-------")
+	planes2 := []sits2.Plane2{sits2.Plane2(day11rawdata)}
+	stopped = false
+	for stopped == false {
+		newPlane := sits2.BuildPlane(planes2[len(planes2)-1])
+		planes2 = append(planes2, newPlane)
+		fmt.Println("Iteration ", len(planes2))
+		if len(planes2) > 2 && strings.Join(planes2[len(planes2)-2], "") == strings.Join(planes2[len(planes2)-1], "") {
+			stopped = true
+		}
+	}
+	finalPlane = strings.Count(strings.Join(planes2[len(planes2)-1], ""), "#")
+	fmt.Printf("Number of occupied seats %d, Number of iterations %d\n", finalPlane, len(planes2))
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -301,4 +333,6 @@ func main() {
 	day9()
 	fmt.Println("\n\n------------------")
 	day10()
+	fmt.Println("\n\n------------------")
+	day11()
 }
