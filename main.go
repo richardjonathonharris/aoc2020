@@ -6,6 +6,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day10"
 	"github.com/richardjonathonharris/aoc2020/day11"
 	"github.com/richardjonathonharris/aoc2020/day11-2"
+	"github.com/richardjonathonharris/aoc2020/day12"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -313,6 +314,21 @@ func day11() {
 	fmt.Printf("Number of occupied seats %d, Number of iterations %d\n", finalPlane, len(planes2))
 }
 
+func day12() {
+	fmt.Println("Day 12!")
+	day12rawdata := strings.Split(utils.PlaintextFromFile("./day12/data.txt"), "\n")
+	ferry := distance.CreateFerry()
+	for _, direction := range day12rawdata {
+		ferry.ProcessDirection(direction, false)
+	}
+	fmt.Println("Ferry's current Manhattan distance from origin: ", ferry.CurrentManhattanDistance())
+	ferryWaypoint := distance.CreateFerry()
+	for _, direction := range day12rawdata {
+		ferryWaypoint.ProcessDirection(direction, true)
+	}
+	fmt.Println("Ferry's current Manhattan distance from origin, based by waypoint: ", ferryWaypoint.CurrentManhattanDistance())
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -335,4 +351,6 @@ func main() {
 	day10()
 	fmt.Println("\n\n------------------")
 	day11()
+	fmt.Println("\n\n------------------")
+	day12()
 }
