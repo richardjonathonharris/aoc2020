@@ -7,6 +7,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day11"
 	"github.com/richardjonathonharris/aoc2020/day11-2"
 	"github.com/richardjonathonharris/aoc2020/day12"
+	"github.com/richardjonathonharris/aoc2020/day13"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -329,6 +330,17 @@ func day12() {
 	fmt.Println("Ferry's current Manhattan distance from origin, based by waypoint: ", ferryWaypoint.CurrentManhattanDistance())
 }
 
+func day13() {
+	fmt.Println("Day 13! (Spooky and evil!)")
+	day13rawdata := strings.Split(utils.PlaintextFromFile("./day13/data.txt"), "\n")
+	timestamp, _ := strconv.Atoi(day13rawdata[0])
+	buses := strings.Split(day13rawdata[1], ",")
+	bestOption := bus.SolveDay1(timestamp, buses)
+	fmt.Println("Best option for bus", bestOption)
+	earliestTimestampForAll := bus.FindEarliestTimestampsInline(buses)
+	fmt.Println("First timestamp where they all line up", earliestTimestampForAll)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -353,4 +365,6 @@ func main() {
 	day11()
 	fmt.Println("\n\n------------------")
 	day12()
+	fmt.Println("\n\n------------------")
+	day13()
 }
