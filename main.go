@@ -8,6 +8,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day11-2"
 	"github.com/richardjonathonharris/aoc2020/day12"
 	"github.com/richardjonathonharris/aoc2020/day13"
+	"github.com/richardjonathonharris/aoc2020/day14"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -341,6 +342,23 @@ func day13() {
 	fmt.Println("First timestamp where they all line up", earliestTimestampForAll)
 }
 
+func day14() {
+	fmt.Println("Day 14!")
+	day14rawdata := strings.Split(utils.PlaintextFromFile("./day14/data.txt"), "\n")
+	memAddresses := bits.ParseInstructions(day14rawdata)
+	sum := 0
+	for _, value := range memAddresses {
+		sum += value
+	}
+	fmt.Println("Total values stored in memory so far: ", sum)
+	memAddressesMemory := bits.ParseInstructionsMemoryAddresses(day14rawdata)
+	sumMems := 0
+	for _, value := range memAddressesMemory {
+		sumMems += value
+	}
+	fmt.Println("Total values using memory address decoder:", sumMems)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -367,4 +385,6 @@ func main() {
 	day12()
 	fmt.Println("\n\n------------------")
 	day13()
+	fmt.Println("\n\n------------------")
+	day14()
 }
