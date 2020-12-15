@@ -9,6 +9,7 @@ import (
 	"github.com/richardjonathonharris/aoc2020/day12"
 	"github.com/richardjonathonharris/aoc2020/day13"
 	"github.com/richardjonathonharris/aoc2020/day14"
+	"github.com/richardjonathonharris/aoc2020/day15"
 	"github.com/richardjonathonharris/aoc2020/day2"
 	"github.com/richardjonathonharris/aoc2020/day3"
 	"github.com/richardjonathonharris/aoc2020/day4"
@@ -359,6 +360,15 @@ func day14() {
 	fmt.Println("Total values using memory address decoder:", sumMems)
 }
 
+func day15() {
+	fmt.Println("Day 15!")
+	data := []int{6, 13, 1, 15, 2, 0}
+	lastValueSaid := game.NumberGame(data, 2020)
+	fmt.Println("Last value said in memory game: ", lastValueSaid)
+	lastValueSaidBig := game.NumberGame(data, 30000000)
+	fmt.Println("Last value said in big memory: ", lastValueSaidBig)
+}
+
 func main() {
 	day1()
 	fmt.Println("\n\n------------------")
@@ -387,4 +397,6 @@ func main() {
 	day13()
 	fmt.Println("\n\n------------------")
 	day14()
+	fmt.Println("\n\n------------------")
+	day15()
 }
